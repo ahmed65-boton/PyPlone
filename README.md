@@ -1,0 +1,1 @@
+ok this a programming lauguage based on python 3.12 yes its 2 gens behind but listen its the most statble embeddable pyhton version in feb 1 march 2026 yes this is made in one day and this is first readme version ues shut up theres docs on r/PyPlone
