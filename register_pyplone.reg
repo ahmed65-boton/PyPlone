@@ -1,0 +1,13 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\.pylo]
+@="PyPloneFile"
+
+[HKEY_CLASSES_ROOT\PyPloneFile]
+@="PyPlone File"
+
+[HKEY_CLASSES_ROOT\PyPloneFile\DefaultIcon]
+@="F:\\PyPlone\\pyplone.ico"
+
+[HKEY_CLASSES_ROOT\PyPloneFile\shell\open\command]
+@="F:\\PyPlone\\Compiler\\pyp.bat \"%1\""
