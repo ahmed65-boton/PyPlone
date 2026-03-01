@@ -1,0 +1,20 @@
+# hello.pylo — PyPLone Hello World
+# Demonstrates: basic Python-like syntax with optional type annotations
+
+def greet(name: str) -> str:
+    return f"Hello, {name}! Welcome to PyPLone."
+
+def main():
+    message: str = greet("World")
+    print(message)
+
+    # Python-like features
+    numbers: list = [1, 2, 3, 4, 5]
+    squares = [x ** 2 for x in numbers]
+    print("Squares:", squares)
+
+    # F-strings
+    total: int = sum(squares)
+    print(f"Sum of squares: {total}")
+
+main()

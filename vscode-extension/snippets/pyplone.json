@@ -1,0 +1,159 @@
+{
+  "PyPLone Function": {
+    "prefix": "def",
+    "body": [
+      "def ${1:function_name}(${2:params}) -> ${3:void}:",
+      "\t${4:pass}"
+    ],
+    "description": "Define a PyPLone function"
+  },
+  "PyPLone Class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}:",
+      "\tdef __init__(self${2:, params}):",
+      "\t\t${3:pass}"
+    ],
+    "description": "Define a PyPLone class"
+  },
+  "PyPLone Pointer Variable": {
+    "prefix": "ptr",
+    "body": [
+      "${1:name}: ptr[${2:Type}] = ${3:nullptr}"
+    ],
+    "description": "Declare a pointer variable"
+  },
+  "PyPLone New Allocation": {
+    "prefix": "new",
+    "body": [
+      "${1:ptr_name}: ptr[${2:Type}] = new ${2:Type}(${3:args})"
+    ],
+    "description": "Heap-allocate a new object"
+  },
+  "PyPLone Delete Pointer": {
+    "prefix": "delete",
+    "body": [
+      "delete ${1:ptr_name}"
+    ],
+    "description": "Free a heap-allocated pointer"
+  },
+  "PyPLone Import (get)": {
+    "prefix": "get",
+    "body": [
+      "get ${1:module}"
+    ],
+    "description": "Import a Python library (PyPLone alias for import)"
+  },
+  "PyPLone From Import": {
+    "prefix": "fromget",
+    "body": [
+      "from ${1:module} get ${2:name}"
+    ],
+    "description": "From-import a symbol (PyPLone alias for from...import)"
+  },
+  "PyPLone If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:pass}"
+    ],
+    "description": "If statement"
+  },
+  "PyPLone If-Else": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:pass}",
+      "else:",
+      "\t${3:pass}"
+    ],
+    "description": "If-else statement"
+  },
+  "PyPLone For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:iterable}:",
+      "\t${3:pass}"
+    ],
+    "description": "For loop"
+  },
+  "PyPLone While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition}:",
+      "\t${2:pass}"
+    ],
+    "description": "While loop"
+  },
+  "PyPLone Try-Except": {
+    "prefix": "try",
+    "body": [
+      "try:",
+      "\t${1:pass}",
+      "except ${2:Exception} as ${3:e}:",
+      "\t${4:pass}"
+    ],
+    "description": "Try-except block"
+  },
+  "PyPLone Type Annotated Variable": {
+    "prefix": "var",
+    "body": [
+      "${1:name}: ${2:int} = ${3:value}"
+    ],
+    "description": "Typed variable declaration"
+  },
+  "PyPLone Linked List Node": {
+    "prefix": "node",
+    "body": [
+      "class ${1:Node}:",
+      "\tdef __init__(self, value: ${2:int}):",
+      "\t\tself.value: ${2:int} = value",
+      "\t\tself.next: ptr[${1:Node}] = nullptr"
+    ],
+    "description": "Linked list node with pointer"
+  },
+  "PyPLone Tkinter Window": {
+    "prefix": "tkwindow",
+    "body": [
+      "get tkinter as tk",
+      "from tkinter get ttk, messagebox",
+      "",
+      "root = tk.Tk()",
+      "root.title('${1:My PyPLone App}')",
+      "root.geometry('${2:600x400}')",
+      "",
+      "${3:# Add widgets here}",
+      "",
+      "root.mainloop()"
+    ],
+    "description": "Basic tkinter window"
+  },
+  "PyPLone Print": {
+    "prefix": "print",
+    "body": [
+      "print(${1:value})"
+    ],
+    "description": "Print statement"
+  },
+  "PyPLone F-String": {
+    "prefix": "f",
+    "body": [
+      "f\"${1:text} {${2:variable}}\""
+    ],
+    "description": "F-string"
+  },
+  "PyPLone List Comprehension": {
+    "prefix": "lc",
+    "body": [
+      "[${1:expr} for ${2:x} in ${3:iterable}]"
+    ],
+    "description": "List comprehension"
+  },
+  "PyPLone Dict Comprehension": {
+    "prefix": "dc",
+    "body": [
+      "{${1:k}: ${2:v} for ${1:k}, ${2:v} in ${3:iterable}.items()}"
+    ],
+    "description": "Dict comprehension"
+  }
+}

@@ -1,0 +1,99 @@
+# test_fileio.pylo — File I/O, JSON, and CSV handling
+# Shows Python's full stdlib power through PyPLone's 'get' syntax
+
+get os
+get json
+get csv
+get tempfile
+from pathlib get Path
+from io get StringIO
+
+def test_json():
+    print("=== JSON Handling ===")
+
+    data: dict = {
+        "language": "PyPLone",
+        "version": "2.0",
+        "features": ["pointers", "Python syntax", "type annotations"],
+        "stats": {"files_tested": 5, "passing": 5}
+    }
+
+    json_str: str = json.dumps(data, indent=2)
+    print("Serialized (first 150 chars):")
+    print(json_str[:150])
+
+    parsed: dict = json.loads(json_str)
+    print(f"Language: {parsed['language']} v{parsed['version']}")
+    print(f"Features: {', '.join(parsed['features'])}")
+    print(f"Tests passing: {parsed['stats']['passing']}/{parsed['stats']['files_tested']}")
+
+
+def test_file_rw():
+    print("\n=== File Read/Write ===")
+    tmp_path: str = tempfile.mktemp(suffix=".txt")
+
+    lines: list = [
+        "# Written by PyPLone test",
+        "Line 1: pointers are cool",
+        "Line 2: ptr[int] p = new int(42)",
+        "Line 3: delete p"
+    ]
+    content: str = "\n".join(lines) + "\n"
+
+    with open(tmp_path, "w", encoding="utf-8") as f:
+        f.write(content)
+
+    print(f"Written to: {tmp_path}")
+
+    with open(tmp_path, "r", encoding="utf-8") as f:
+        read_lines: list = f.readlines()
+
+    print(f"Read {len(read_lines)} lines:")
+    for i, line in enumerate(read_lines, 1):
+        print(f"  {i}: {line.rstrip()}")
+
+    os.unlink(tmp_path)
+    print("Temp file deleted.")
+
+
+def test_csv():
+    print("\n=== CSV Handling ===")
+    csv_data: str = "name,language,score\nAlice,PyPLone,98\nBob,C++,85\nCarol,Python,92\nDave,PyPLone,96\n"
+    reader = csv.DictReader(StringIO(csv_data))
+    rows: list = list(reader)
+    print(f"Loaded {len(rows)} rows")
+    for row in rows:
+        bar: str = "█" * (int(row["score"]) // 10)
+        print(f"  {row['name']:6s} [{row['language']:8s}] {row['score']:3s} {bar}")
+
+    scores: list = [int(r["score"]) for r in rows]
+    avg: float = sum(scores) / len(scores)
+    print(f"Avg: {avg:.1f}, Max: {max(scores)}, Min: {min(scores)}")
+
+
+def test_path():
+    print("\n=== Path Operations ===")
+    cwd = Path(os.getcwd())
+    print(f"CWD:    {cwd}")
+    print(f"Parent: {cwd.parent.name}")
+
+    py_files: list = list(cwd.glob("*.py")) + list(cwd.glob("*.pylo"))
+    print(f"Found {len(py_files)} .py/.pylo files:")
+    for f in sorted(py_files)[:5]:
+        size: int = f.stat().st_size if f.exists() else 0
+        print(f"  {f.name:40s} {size:6d} bytes")
+
+
+def main():
+    print("╔════════════════════════════════════════════╗")
+    print("║  PyPLone File I/O & Stdlib Test            ║")
+    print("╚════════════════════════════════════════════╝\n")
+
+    test_json()
+    test_file_rw()
+    test_csv()
+    test_path()
+
+    print("\n✓ All file I/O tests passed!")
+
+main()

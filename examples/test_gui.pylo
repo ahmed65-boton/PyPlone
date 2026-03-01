@@ -1,0 +1,159 @@
+# test_gui.pylo — PyPLone GUI Application
+# Demonstrates building a tkinter GUI with Python library access
+
+get tkinter as tk
+from tkinter get ttk, messagebox, scrolledtext
+get math
+get random
+
+class CalculatorApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("PyPLone Calculator")
+        self.root.geometry("360x500")
+        self.root.resizable(False, False)
+        self.root.configure(bg="#1e1e2e")
+
+        self.display_var: str = tk.StringVar(value="0")
+        self.expression: str = ""
+        self.setup_ui()
+
+    def setup_ui(self):
+        # Display
+        display_frame = tk.Frame(self.root, bg="#313244", relief="flat")
+        display_frame.pack(fill="x", padx=10, pady=(15, 5))
+
+        tk.Label(display_frame, text="PyPLone Calculator",
+                 font=("Consolas", 10), fg="#6c7086", bg="#313244").pack(pady=(5, 0))
+
+        tk.Entry(display_frame, textvariable=self.display_var,
+                 font=("Consolas", 24, "bold"), fg="#cdd6f4", bg="#313244",
+                 relief="flat", justify="right", bd=0,
+                 disabledforeground="#cdd6f4", state="disabled").pack(
+            fill="x", padx=15, pady=(0, 10))
+
+        # Buttons grid
+        btn_frame = tk.Frame(self.root, bg="#1e1e2e")
+        btn_frame.pack(padx=10, pady=5, fill="both", expand=True)
+
+        buttons: list = [
+            ["C",  "±",  "%",  "÷"],
+            ["7",  "8",  "9",  "×"],
+            ["4",  "5",  "6",  "−"],
+            ["1",  "2",  "3",  "+"],
+            ["0",       ".",  "="],
+        ]
+
+        for row_idx, row in enumerate(buttons):
+            for col_idx, text in enumerate(row):
+                colspan: int = 2 if (row_idx == 4 and text == "0") else 1
+                color = self._btn_color(text)
+                btn = tk.Button(
+                    btn_frame, text=text,
+                    font=("Consolas", 16, "bold"),
+                    bg=color, fg="#cdd6f4",
+                    relief="flat", cursor="hand2",
+                    command=lambda t=text: self.on_press(t),
+                    activebackground="#585b70", activeforeground="#cdd6f4"
+                )
+                btn.grid(row=row_idx, column=col_idx,
+                         columnspan=colspan,
+                         sticky="nsew", padx=3, pady=3, ipadx=5, ipady=12)
+
+        for i in range(5):
+            btn_frame.rowconfigure(i, weight=1)
+        for i in range(4):
+            btn_frame.columnconfigure(i, weight=1)
+
+        # History
+        tk.Label(self.root, text="History", font=("Consolas", 9),
+                 fg="#6c7086", bg="#1e1e2e").pack(anchor="w", padx=12)
+        self.history = scrolledtext.ScrolledText(
+            self.root, height=4, font=("Consolas", 9),
+            bg="#11111b", fg="#a6e3a1", relief="flat",
+            state="disabled", bd=0
+        )
+        self.history.pack(fill="x", padx=10, pady=(0, 10))
+
+    def _btn_color(self, text: str) -> str:
+        if text == "=":
+            return "#a6e3a1"
+        if text in ("÷", "×", "−", "+"):
+            return "#89b4fa"
+        if text in ("C", "±", "%"):
+            return "#45475a"
+        return "#313244"
+
+    def on_press(self, text: str):
+        op_map: dict = {"÷": "/", "×": "*", "−": "-"}
+
+        if text == "C":
+            self.expression = ""
+            self.display_var.set("0")
+        elif text == "=":
+            try:
+                result = eval(self.expression)
+                result_str: str = f"{result:.10g}"
+                self._add_history(f"{self.expression} = {result_str}")
+                self.display_var.set(result_str)
+                self.expression = result_str
+            except Exception:
+                self.display_var.set("Error")
+                self.expression = ""
+        elif text == "±":
+            try:
+                val: float = float(self.expression or "0")
+                self.expression = str(-val)
+                self.display_var.set(self.expression)
+            except Exception:
+                pass
+        elif text == "%":
+            try:
+                val: float = float(self.expression or "0")
+                self.expression = str(val / 100)
+                self.display_var.set(self.expression)
+            except Exception:
+                pass
+        else:
+            t: str = op_map.get(text, text)
+            self.expression += t
+            self.display_var.set(self.expression[-20:])
+
+    def _add_history(self, entry: str):
+        self.history.configure(state="normal")
+        self.history.insert("end", entry + "\n")
+        self.history.see("end")
+        self.history.configure(state="disabled")
+
+
+class AboutWindow:
+    def __init__(self, parent):
+        win = tk.Toplevel(parent)
+        win.title("About PyPLone Calculator")
+        win.geometry("320x200")
+        win.configure(bg="#1e1e2e")
+        win.resizable(False, False)
+        tk.Label(win, text="PyPLone Calculator",
+                 font=("Consolas", 16, "bold"), fg="#cba6f7", bg="#1e1e2e").pack(pady=20)
+        tk.Label(win, text="Built with PyPLone v2.0\nPython-like syntax · C++ pointers",
+                 font=("Consolas", 10), fg="#cdd6f4", bg="#1e1e2e", justify="center").pack()
+        tk.Button(win, text="Close", font=("Consolas", 10),
+                  bg="#313244", fg="#cdd6f4", relief="flat",
+                  command=win.destroy, padx=20, pady=5).pack(pady=20)
+
+
+def main():
+    root = tk.Tk()
+    app = CalculatorApp(root)
+
+    # Menu
+    menubar = tk.Menu(root, bg="#313244", fg="#cdd6f4", relief="flat")
+    helpmenu = tk.Menu(menubar, tearoff=0, bg="#313244", fg="#cdd6f4")
+    helpmenu.add_command(label="About", command=lambda: AboutWindow(root))
+    menubar.add_cascade(label="Help", menu=helpmenu)
+    root.configure(menu=menubar)
+
+    root.mainloop()
+
+
+main()

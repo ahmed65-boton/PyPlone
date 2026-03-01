@@ -1,0 +1,89 @@
+# pointers.pylo — PyPLone Pointer Demonstration
+# Showcases the C++ pointer features unique to PyPLone
+
+class Node:
+    def __init__(self, value: int):
+        self.value = value
+        self.next: ptr[Node] = nullptr   # typed null pointer
+
+    def __repr__(self) -> str:
+        return f"Node({self.value})"
+
+
+class LinkedList:
+    def __init__(self):
+        self.head: ptr[Node] = nullptr
+        self.size: int = 0
+
+    def push_front(self, value: int):
+        # Allocate a new Node on the "heap"
+        node_ptr: ptr[Node] = new Node(value)
+        # -> is pointer member access (like C++)
+        node_ptr->next = self.head
+        self.head = node_ptr
+        self.size += 1
+
+    def pop_front(self) -> int:
+        if self.head == nullptr:
+            raise RuntimeError("pop from empty list")
+        # Dereference to get value
+        value: int = self.head->value
+        old_head: ptr[Node] = self.head
+        self.head = self.head->next
+        # Free the old node (like C++ delete)
+        delete old_head
+        self.size -= 1
+        return value
+
+    def print_list(self):
+        current: ptr[Node] = self.head
+        parts = []
+        while current != nullptr:
+            parts.append(current->value)
+            current = current->next
+        print(" -> ".join(str(x) for x in parts))
+
+
+def demonstrate_raw_pointers():
+    print("=== Raw Pointer Demo ===")
+
+    x: int = 42
+    # Take address of x
+    p: ptr[int] = &x
+    print(f"Value of x:    {x}")
+    print(f"Pointer to x:  {p}")
+    print(f"Dereferenced:  {*p}")
+
+    # Allocate on heap
+    y_ptr: ptr[int] = new int(100)
+    print(f"\nHeap-allocated value: {*y_ptr}")
+    # Free heap memory
+    delete y_ptr
+
+    print("Heap memory freed successfully.")
+
+
+def demonstrate_linked_list():
+    print("\n=== Linked List with Pointers ===")
+    ll = LinkedList()
+
+    for val in [10, 20, 30, 40, 50]:
+        ll.push_front(val)
+
+    print(f"List size: {ll.size}")
+    print("List contents:")
+    ll.print_list()
+
+    popped: int = ll.pop_front()
+    print(f"\nPopped: {popped}")
+    print("After pop:")
+    ll.print_list()
+
+
+def main():
+    demonstrate_raw_pointers()
+    demonstrate_linked_list()
+    print("\n=== PyPLone Pointer Demo Complete ===")
+
+
+main()

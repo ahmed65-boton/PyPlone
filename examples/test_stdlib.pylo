@@ -1,0 +1,75 @@
+# test_stdlib.pylo — Python Standard Library Access
+# Demonstrates using 'get' to import any Python library
+
+get os
+get sys
+get math
+get random
+get datetime
+from collections get Counter, defaultdict
+from pathlib get Path
+
+def test_math():
+    print("=== Math Module ===")
+    pi: float = math.pi
+    e: float = math.e
+    print(f"pi = {pi:.6f}")
+    print(f"e  = {e:.6f}")
+    print(f"sqrt(2) = {math.sqrt(2):.6f}")
+    print(f"factorial(10) = {math.factorial(10)}")
+    print(f"gcd(48, 18) = {math.gcd(48, 18)}")
+
+def test_os():
+    print("\n=== OS Module ===")
+    print(f"Platform: {sys.platform}")
+    print(f"Python:   {sys.version.split()[0]}")
+    print(f"CWD:      {os.getcwd()}")
+    env_path = os.environ.get("PATH", "not set")[:50]
+    print(f"PATH[:50]: {env_path}")
+
+def test_random():
+    print("\n=== Random Module ===")
+    random.seed(42)
+    nums: list = [random.randint(1, 100) for _ in range(10)]
+    print(f"Random ints:   {nums}")
+    print(f"Max: {max(nums)}, Min: {min(nums)}, Sum: {sum(nums)}")
+    sample: list = random.sample(nums, 5)
+    print(f"Sample of 5:   {sample}")
+    shuffled: list = nums[:]
+    random.shuffle(shuffled)
+    print(f"Shuffled:      {shuffled}")
+
+def test_collections():
+    print("\n=== Collections Module ===")
+    words: list = ["apple", "banana", "apple", "cherry", "banana", "apple"]
+    counter: Counter = Counter(words)
+    print(f"Word counts: {dict(counter)}")
+    print(f"Most common: {counter.most_common(2)}")
+
+    scores = defaultdict(list)
+    for name, score in [("Alice", 95), ("Bob", 87), ("Alice", 92), ("Bob", 78)]:
+        scores[name].append(score)
+    for name, s in scores.items():
+        avg: float = sum(s) / len(s)
+        print(f"  {name}: scores={s}, avg={avg:.1f}")
+
+def test_datetime():
+    print("\n=== Datetime Module ===")
+    now = datetime.datetime.now()
+    print(f"Now:    {now.strftime('%Y-%m-%d %H:%M:%S')}")
+    delta = datetime.timedelta(days=30)
+    future = now + delta
+    print(f"+30d:   {future.strftime('%Y-%m-%d')}")
+
+def main():
+    print("╔══════════════════════════════════════════╗")
+    print("║  PyPLone Stdlib Test — using 'get'       ║")
+    print("╚══════════════════════════════════════════╝")
+    test_math()
+    test_os()
+    test_random()
+    test_collections()
+    test_datetime()
+    print("\n✓ All stdlib tests passed!")
+
+main()

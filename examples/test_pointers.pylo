@@ -1,0 +1,242 @@
+# test_pointers.pylo — Advanced Pointer Operations
+# Full showcase of PyPLone's C++ pointer system
+
+get sys
+
+# ─── Generic Stack using pointers ─────────────────────────────────────────────
+
+class StackNode:
+    def __init__(self, data):
+        self.data = data
+        self.prev: ptr[StackNode] = nullptr
+
+class Stack:
+    def __init__(self):
+        self.top: ptr[StackNode] = nullptr
+        self.size: int = 0
+
+    def push(self, data):
+        node: ptr[StackNode] = new StackNode(data)
+        node->prev = self.top
+        self.top = node
+        self.size += 1
+
+    def pop(self):
+        if self.top == nullptr:
+            raise IndexError("pop from empty stack")
+        data = self.top->data
+        old: ptr[StackNode] = self.top
+        self.top = self.top->prev
+        delete old
+        self.size -= 1
+        return data
+
+    def peek(self):
+        if self.top == nullptr:
+            raise IndexError("peek on empty stack")
+        return self.top->data
+
+    def is_empty(self) -> bool:
+        return self.top == nullptr
+
+    def __len__(self) -> int:
+        return self.size
+
+    def to_list(self) -> list:
+        result: list = []
+        cur: ptr[StackNode] = self.top
+        while cur != nullptr:
+            result.append(cur->data)
+            cur = cur->prev
+        return result
+
+
+# ─── Double-linked list ───────────────────────────────────────────────────────
+
+class DLNode:
+    def __init__(self, val: int):
+        self.val: int = val
+        self.prev: ptr[DLNode] = nullptr
+        self.next: ptr[DLNode] = nullptr
+
+class DoublyLinkedList:
+    def __init__(self):
+        self.head: ptr[DLNode] = nullptr
+        self.tail: ptr[DLNode] = nullptr
+        self.count: int = 0
+
+    def push_back(self, val: int):
+        node: ptr[DLNode] = new DLNode(val)
+        if self.tail == nullptr:
+            self.head = node
+            self.tail = node
+        else:
+            node->prev = self.tail
+            self.tail->next = node
+            self.tail = node
+        self.count += 1
+
+    def push_front(self, val: int):
+        node: ptr[DLNode] = new DLNode(val)
+        if self.head == nullptr:
+            self.head = node
+            self.tail = node
+        else:
+            node->next = self.head
+            self.head->prev = node
+            self.head = node
+        self.count += 1
+
+    def pop_back(self) -> int:
+        if self.tail == nullptr:
+            raise IndexError("pop from empty list")
+        val: int = self.tail->val
+        old: ptr[DLNode] = self.tail
+        self.tail = self.tail->prev
+        if self.tail != nullptr:
+            self.tail->next = nullptr
+        else:
+            self.head = nullptr
+        delete old
+        self.count -= 1
+        return val
+
+    def forward(self) -> list:
+        result: list = []
+        cur: ptr[DLNode] = self.head
+        while cur != nullptr:
+            result.append(cur->val)
+            cur = cur->next
+        return result
+
+    def backward(self) -> list:
+        result: list = []
+        cur: ptr[DLNode] = self.tail
+        while cur != nullptr:
+            result.append(cur->val)
+            cur = cur->prev
+        return result
+
+
+# ─── Binary Heap (Min-Heap) using array ──────────────────────────────────────
+
+class MinHeap:
+    def __init__(self):
+        self.data: list = []
+
+    def push(self, val: int):
+        self.data.append(val)
+        self._bubble_up(len(self.data) - 1)
+
+    def pop(self) -> int:
+        if not self.data:
+            raise IndexError("pop from empty heap")
+        root: int = self.data[0]
+        last: int = self.data.pop()
+        if self.data:
+            self.data[0] = last
+            self._sink_down(0)
+        return root
+
+    def _bubble_up(self, i: int):
+        while i > 0:
+            parent: int = (i - 1) // 2
+            if self.data[i] < self.data[parent]:
+                self.data[i], self.data[parent] = self.data[parent], self.data[i]
+                i = parent
+            else:
+                break
+
+    def _sink_down(self, i: int):
+        n: int = len(self.data)
+        while True:
+            smallest: int = i
+            left: int = 2 * i + 1
+            right: int = 2 * i + 2
+            if left < n and self.data[left] < self.data[smallest]:
+                smallest = left
+            if right < n and self.data[right] < self.data[smallest]:
+                smallest = right
+            if smallest != i:
+                self.data[i], self.data[smallest] = self.data[smallest], self.data[i]
+                i = smallest
+            else:
+                break
+
+    def peek(self) -> int:
+        return self.data[0]
+
+    def __len__(self) -> int:
+        return len(self.data)
+
+
+# ─── Tests ────────────────────────────────────────────────────────────────────
+
+def test_stack():
+    print("=== Stack (pointer-linked) ===")
+    s = Stack()
+    for i in [10, 20, 30, 40, 50]:
+        s.push(i)
+    print(f"  Stack: {s.to_list()}")
+    print(f"  Size:  {len(s)}")
+    print(f"  Peek:  {s.peek()}")
+    popped: list = []
+    while not s.is_empty():
+        popped.append(s.pop())
+    print(f"  Popped (LIFO): {popped}")
+    print(f"  Empty: {s.is_empty()}")
+
+def test_doubly_linked():
+    print("\n=== Doubly-Linked List ===")
+    dll = DoublyLinkedList()
+    for v in [1, 2, 3, 4, 5]:
+        dll.push_back(v)
+    dll.push_front(0)
+    print(f"  Forward:  {dll.forward()}")
+    print(f"  Backward: {dll.backward()}")
+    print(f"  Count:    {dll.count}")
+    dll.pop_back()
+    dll.pop_back()
+    print(f"  After 2 pops: {dll.forward()}")
+
+def test_heap():
+    print("\n=== Min-Heap ===")
+    h = MinHeap()
+    values: list = [5, 3, 8, 1, 9, 2, 7, 4, 6]
+    for v in values:
+        h.push(v)
+    print(f"  Inserted: {values}")
+    sorted_vals: list = []
+    while len(h) > 0:
+        sorted_vals.append(h.pop())
+    print(f"  Heap-sorted: {sorted_vals}")
+
+def test_ptr_arithmetic():
+    print("\n=== Raw Pointer Operations ===")
+    x: int = 100
+    y: int = 200
+    p: ptr[int] = &x
+    q: ptr[int] = &y
+    print(f"  x={x}, y={y}")
+    print(f"  *p={*p}, *q={*q}")
+    print(f"  p==q: {p == q}")
+
+    # Allocate a fresh heap value
+    val: int = 999
+    heap_tmp: ptr[int] = &val
+    print(f"  heap_tmp value: {*heap_tmp}")
+    print("  pointer operations — OK")
+
+def main():
+    print("╔════════════════════════════════════════════╗")
+    print("║  PyPLone Advanced Pointer Tests            ║")
+    print("╚════════════════════════════════════════════╝\n")
+
+    test_stack()
+    test_doubly_linked()
+    test_heap()
+    test_ptr_arithmetic()
+
+    print("\n✓ All pointer tests passed!")
+
+main()

@@ -1,0 +1,260 @@
+{
+  "name": "PyPLone",
+  "scopeName": "source.pyplone",
+  "fileTypes": ["pylo"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#strings" },
+    { "include": "#fstrings" },
+    { "include": "#pointer-keywords" },
+    { "include": "#import-keywords" },
+    { "include": "#keywords" },
+    { "include": "#builtins" },
+    { "include": "#type-annotations" },
+    { "include": "#decorators" },
+    { "include": "#numbers" },
+    { "include": "#operators" },
+    { "include": "#pointer-operators" },
+    { "include": "#class-def" },
+    { "include": "#function-def" },
+    { "include": "#identifiers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.pyplone",
+          "match": "#.*$"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.triple.double.pyplone",
+          "begin": "\"\"\"",
+          "end": "\"\"\"",
+          "patterns": [{ "include": "#string-escapes" }]
+        },
+        {
+          "name": "string.quoted.triple.single.pyplone",
+          "begin": "'''",
+          "end": "'''",
+          "patterns": [{ "include": "#string-escapes" }]
+        },
+        {
+          "name": "string.quoted.double.pyplone",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [{ "include": "#string-escapes" }]
+        },
+        {
+          "name": "string.quoted.single.pyplone",
+          "begin": "'",
+          "end": "'",
+          "patterns": [{ "include": "#string-escapes" }]
+        }
+      ]
+    },
+    "fstrings": {
+      "patterns": [
+        {
+          "name": "string.interpolated.pyplone",
+          "begin": "f\"\"\"",
+          "end": "\"\"\"",
+          "patterns": [
+            { "include": "#fstring-expression" },
+            { "include": "#string-escapes" }
+          ]
+        },
+        {
+          "name": "string.interpolated.pyplone",
+          "begin": "f\"",
+          "end": "\"",
+          "patterns": [
+            { "include": "#fstring-expression" },
+            { "include": "#string-escapes" }
+          ]
+        },
+        {
+          "name": "string.interpolated.pyplone",
+          "begin": "f'",
+          "end": "'",
+          "patterns": [
+            { "include": "#fstring-expression" },
+            { "include": "#string-escapes" }
+          ]
+        }
+      ]
+    },
+    "fstring-expression": {
+      "name": "meta.embedded.expression.pyplone",
+      "begin": "\\{",
+      "end": "\\}",
+      "patterns": [{ "include": "$self" }]
+    },
+    "string-escapes": {
+      "name": "constant.character.escape.pyplone",
+      "match": "\\\\[ntrb\\\\\"'0]"
+    },
+    "pointer-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.pointer.pyplone storage.type.pointer.pyplone",
+          "match": "\\b(ptr|new|delete|nullptr)\\b"
+        }
+      ]
+    },
+    "import-keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.import.pyplone",
+          "match": "\\b(get|import|from)\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.flow.pyplone",
+          "match": "\\b(if|elif|else|for|while|break|continue|return|pass|yield|async|await|with|as)\\b"
+        },
+        {
+          "name": "keyword.control.exception.pyplone",
+          "match": "\\b(try|except|finally|raise|assert)\\b"
+        },
+        {
+          "name": "keyword.other.pyplone",
+          "match": "\\b(global|nonlocal|del|lambda|in|is|not|and|or)\\b"
+        },
+        {
+          "name": "constant.language.pyplone",
+          "match": "\\b(True|False|None|nullptr)\\b"
+        },
+        {
+          "name": "keyword.other.print.pyplone",
+          "match": "\\bprint\\b"
+        }
+      ]
+    },
+    "builtins": {
+      "patterns": [
+        {
+          "name": "support.function.builtin.pyplone",
+          "match": "\\b(abs|all|any|bin|bool|bytearray|bytes|callable|chr|classmethod|compile|complex|delattr|dict|dir|divmod|enumerate|eval|exec|filter|float|format|frozenset|getattr|globals|hasattr|hash|help|hex|id|input|int|isinstance|issubclass|iter|len|list|locals|map|max|memoryview|min|next|object|oct|open|ord|pow|property|range|repr|reversed|round|set|setattr|slice|sorted|staticmethod|str|sum|super|tuple|type|vars|zip)\\b"
+        }
+      ]
+    },
+    "type-annotations": {
+      "patterns": [
+        {
+          "name": "storage.type.pyplone",
+          "match": "\\b(int|float|str|bool|list|dict|tuple|set|void|auto)\\b"
+        },
+        {
+          "name": "storage.type.pointer.pyplone",
+          "match": "ptr\\s*\\[",
+          "captures": {
+            "0": { "name": "storage.type.pointer.pyplone" }
+          }
+        }
+      ]
+    },
+    "decorators": {
+      "patterns": [
+        {
+          "name": "entity.name.function.decorator.pyplone",
+          "match": "@[a-zA-Z_][a-zA-Z0-9_\\.]*"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.pyplone",
+          "match": "\\b([0-9][0-9_]*\\.([0-9][0-9_]*)?([eE][+-]?[0-9]+)?|\\.[0-9][0-9_]*([eE][+-]?[0-9]+)?)\\b"
+        },
+        {
+          "name": "constant.numeric.hex.pyplone",
+          "match": "\\b0[xX][0-9a-fA-F][0-9a-fA-F_]*\\b"
+        },
+        {
+          "name": "constant.numeric.integer.pyplone",
+          "match": "\\b[0-9][0-9_]*\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.comparison.pyplone",
+          "match": "==|!=|<=|>=|<|>"
+        },
+        {
+          "name": "keyword.operator.assignment.pyplone",
+          "match": "\\+=|-=|\\*=|/=|%=|:=|="
+        },
+        {
+          "name": "keyword.operator.arithmetic.pyplone",
+          "match": "\\*\\*|//|[+\\-*/%]"
+        },
+        {
+          "name": "keyword.operator.bitwise.pyplone",
+          "match": "<<|>>|[&|^~]"
+        },
+        {
+          "name": "keyword.operator.walrus.pyplone",
+          "match": ":="
+        }
+      ]
+    },
+    "pointer-operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.pointer.deref.pyplone",
+          "match": "->",
+          "captures": {
+            "0": { "name": "keyword.operator.pointer.arrow.pyplone" }
+          }
+        },
+        {
+          "comment": "Address-of &var — match & followed by identifier, not &&",
+          "name": "keyword.operator.pointer.addressof.pyplone",
+          "match": "&(?=[a-zA-Z_])"
+        }
+      ]
+    },
+    "class-def": {
+      "patterns": [
+        {
+          "name": "meta.class.pyplone",
+          "match": "\\b(class)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.class.pyplone" },
+            "2": { "name": "entity.name.type.class.pyplone" }
+          }
+        }
+      ]
+    },
+    "function-def": {
+      "patterns": [
+        {
+          "name": "meta.function.pyplone",
+          "match": "\\b(def)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.declaration.function.pyplone" },
+            "2": { "name": "entity.name.function.pyplone" }
+          }
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable.other.pyplone",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,237 @@
+# test_game.pylo — Mini Console RPG
+# Demonstrates PyPLone combining Python stdlib with pointer-linked game state
+
+get random
+get os
+from dataclasses get dataclass
+
+# ─── Entity base using pointer-linked inventory ────────────────────────────
+
+class InventoryNode:
+    def __init__(self, item: str, qty: int):
+        self.item: str = item
+        self.qty: int = qty
+        self.next: ptr[InventoryNode] = nullptr
+
+class Inventory:
+    def __init__(self):
+        self.head: ptr[InventoryNode] = nullptr
+
+    def add(self, item: str, qty: int = 1):
+        cur: ptr[InventoryNode] = self.head
+        while cur != nullptr:
+            if cur->item == item:
+                cur->qty += qty
+                return
+            cur = cur->next
+        node: ptr[InventoryNode] = new InventoryNode(item, qty)
+        node->next = self.head
+        self.head = node
+
+    def use(self, item: str) -> bool:
+        cur: ptr[InventoryNode] = self.head
+        while cur != nullptr:
+            if cur->item == item and cur->qty > 0:
+                cur->qty -= 1
+                return True
+            cur = cur->next
+        return False
+
+    def has(self, item: str) -> bool:
+        cur: ptr[InventoryNode] = self.head
+        while cur != nullptr:
+            if cur->item == item and cur->qty > 0:
+                return True
+            cur = cur->next
+        return False
+
+    def show(self) -> str:
+        items: list = []
+        cur: ptr[InventoryNode] = self.head
+        while cur != nullptr:
+            if cur->qty > 0:
+                items.append(f"{cur->item}×{cur->qty}")
+            cur = cur->next
+        return ", ".join(items) if items else "(empty)"
+
+
+# ─── Game entities ────────────────────────────────────────────────────────────
+
+class Hero:
+    def __init__(self, name: str):
+        self.name: str = name
+        self.hp: int = 100
+        self.max_hp: int = 100
+        self.atk: int = 15
+        self.defense: int = 5
+        self.gold: int = 0
+        self.level: int = 1
+        self.xp: int = 0
+        self.xp_next: int = 50
+        self.inventory = Inventory()
+        self.inventory.add("Health Potion", 3)
+        self.inventory.add("Mana Potion", 1)
+
+    def is_alive(self) -> bool:
+        return self.hp > 0
+
+    def take_damage(self, dmg: int) -> int:
+        actual: int = max(1, dmg - self.defense)
+        self.hp = max(0, self.hp - actual)
+        return actual
+
+    def heal(self, amount: int) -> int:
+        old: int = self.hp
+        self.hp = min(self.max_hp, self.hp + amount)
+        return self.hp - old
+
+    def gain_xp(self, xp: int):
+        self.xp += xp
+        if self.xp >= self.xp_next:
+            self.level_up()
+
+    def level_up(self):
+        self.level += 1
+        self.xp -= self.xp_next
+        self.xp_next = int(self.xp_next * 1.5)
+        self.max_hp += 20
+        self.hp = self.max_hp
+        self.atk += 3
+        self.defense += 1
+        print(f"\n  ★ LEVEL UP! {self.name} is now level {self.level}!")
+        print(f"    HP +20 ({self.max_hp}), ATK +3 ({self.atk}), DEF +1 ({self.defense})")
+
+    def use_potion(self) -> bool:
+        if self.inventory.use("Health Potion"):
+            healed: int = self.heal(40)
+            print(f"  🧪 Used Health Potion! +{healed} HP → {self.hp}/{self.max_hp}")
+            return True
+        print("  No Health Potions left!")
+        return False
+
+    def status(self) -> str:
+        bar_len: int = 20
+        filled: int = int((self.hp / self.max_hp) * bar_len)
+        bar: str = "█" * filled + "░" * (bar_len - filled)
+        parts: list = [
+            f"  {self.name} Lv{self.level}",
+            f"  HP [{bar}] {self.hp}/{self.max_hp}",
+            f"  XP {self.xp}/{self.xp_next}  Gold {self.gold}g"
+        ]
+        return "  ".join(parts)
+
+
+class Monster:
+    def __init__(self, name: str, hp: int, atk: int, defense: int,
+                 xp_reward: int, gold_reward: int):
+        self.name: str = name
+        self.hp: int = hp
+        self.max_hp: int = hp
+        self.atk: int = atk
+        self.defense: int = defense
+        self.xp_reward: int = xp_reward
+        self.gold_reward: int = gold_reward
+
+    def is_alive(self) -> bool:
+        return self.hp > 0
+
+    def take_damage(self, dmg: int) -> int:
+        actual: int = max(1, dmg - self.defense)
+        self.hp = max(0, self.hp - actual)
+        return actual
+
+    def attack(self) -> int:
+        variance: int = random.randint(-3, 3)
+        return max(1, self.atk + variance)
+
+
+def make_monster(difficulty: int) -> Monster:
+    monsters: list = [
+        ("Goblin",      20, 8,  1, 15, 5),
+        ("Orc",         40, 12, 3, 30, 12),
+        ("Troll",       60, 16, 5, 50, 20),
+        ("Dark Knight", 80, 20, 8, 80, 35),
+        ("Dragon",     120, 28,10,150, 60),
+    ]
+    idx: int = min(difficulty, len(monsters) - 1)
+    name, hp, atk, defense, xp, gold = monsters[idx]
+    hp_var: int = random.randint(-5, 10)
+    return Monster(name, hp + hp_var, atk, defense, xp, gold)
+
+
+def battle(hero: Hero, monster: Monster) -> bool:
+    print(f"\n  ⚔  A wild {monster.name} appears! (HP {monster.hp})")
+
+    round_num: int = 0
+    while hero.is_alive() and monster.is_alive():
+        round_num += 1
+        print(f"\n  Round {round_num}")
+
+        # Hero attacks
+        hero_dmg: int = random.randint(hero.atk - 3, hero.atk + 5)
+        taken: int = monster.take_damage(hero_dmg)
+        print(f"  → You attack {monster.name} for {taken} damage! ({monster.hp}/{monster.max_hp} HP)")
+
+        if not monster.is_alive():
+            break
+
+        # Monster attacks
+        mon_dmg: int = monster.attack()
+        taken = hero.take_damage(mon_dmg)
+        print(f"  ← {monster.name} hits you for {taken} damage! ({hero.hp}/{hero.max_hp} HP)")
+
+        # Auto-use potion if low
+        if hero.hp < 25 and hero.inventory.has("Health Potion"):
+            hero.use_potion()
+
+    return hero.is_alive()
+
+
+def run_game():
+    print("╔════════════════════════════════════════════════╗")
+    print("║       PyPLone Mini RPG — Dungeon Crawler       ║")
+    print("╚════════════════════════════════════════════════╝")
+    print("\nEnter your hero's name (or press Enter for 'PyPLone Hero'):", end=" ")
+
+    try:
+        name: str = input().strip() or "PyPLone Hero"
+    except EOFError:
+        name = "PyPLone Hero"
+
+    hero = Hero(name)
+    print(f"\nWelcome, {hero.name}! Your quest begins...")
+    print(f"Inventory: {hero.inventory.show()}")
+
+    total_battles: int = 5
+    wins: int = 0
+
+    for battle_num in range(1, total_battles + 1):
+        print(f"\n{'═' * 50}")
+        print(f"  Battle {battle_num}/{total_battles}")
+        print(hero.status())
+
+        difficulty: int = min(battle_num - 1, 4)
+        monster = make_monster(difficulty)
+
+        won: bool = battle(hero, monster)
+
+        if won:
+            wins += 1
+            hero.gold += monster.gold_reward
+            hero.gain_xp(monster.xp_reward)
+            print(f"\n  ✓ Victory! +{monster.xp_reward} XP, +{monster.gold_reward}g")
+        else:
+            print(f"\n  ✗ {hero.name} was defeated by {monster.name}!")
+            break
+
+    print(f"\n{'═' * 50}")
+    print(f"\n  Game Over — Final Stats:")
+    print(hero.status())
+    print(f"  Battles won: {wins}/{total_battles}")
+    if wins == total_battles:
+        print(f"\n  🏆 DUNGEON CLEARED! Congratulations, {hero.name}!")
+    else:
+        print(f"\n  Better luck next time!")
+
+
+run_game()

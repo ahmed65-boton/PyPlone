@@ -1,0 +1,120 @@
+# classes.pylo — PyPLone OOP + Pointer Member Demo
+# Full Python class system with optional C++ pointer annotations
+
+from typing import Optional
+
+class Animal:
+    def __init__(self, name: str, age: int):
+        self.name: str = name
+        self.age: int = age
+
+    def speak(self) -> str:
+        return "..."
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}(name={self.name!r}, age={self.age})"
+
+
+class Dog(Animal):
+    def __init__(self, name: str, age: int, breed: str):
+        super().__init__(name, age)
+        self.breed: str = breed
+
+    def speak(self) -> str:
+        return f"Woof! I'm {self.name}."
+
+
+class Cat(Animal):
+    def __init__(self, name: str, age: int):
+        super().__init__(name, age)
+
+    def speak(self) -> str:
+        return f"Meow. (I'm {self.name}.)"
+
+
+# ── Pointer-linked tree structure ─────────────────────────────────────────────
+
+class TreeNode:
+    def __init__(self, val: int):
+        self.val: int = val
+        self.left: ptr[TreeNode] = nullptr
+        self.right: ptr[TreeNode] = nullptr
+
+
+class BST:
+    """Binary Search Tree using pointer semantics."""
+
+    def __init__(self):
+        self.root: ptr[TreeNode] = nullptr
+
+    def insert(self, val: int):
+        node: ptr[TreeNode] = new TreeNode(val)
+        if self.root == nullptr:
+            self.root = node
+            return
+        current: ptr[TreeNode] = self.root
+        while True:
+            if val < current->val:
+                if current->left == nullptr:
+                    current->left = node
+                    break
+                current = current->left
+            else:
+                if current->right == nullptr:
+                    current->right = node
+                    break
+                current = current->right
+
+    def inorder(self, node_ptr: ptr[TreeNode], result: list):
+        if node_ptr == nullptr:
+            return
+        self.inorder(node_ptr->left, result)
+        result.append(node_ptr->val)
+        self.inorder(node_ptr->right, result)
+
+    def sorted_values(self) -> list:
+        result: list = []
+        self.inorder(self.root, result)
+        return result
+
+
+def main():
+    print("=== PyPLone OOP Demo ===\n")
+
+    # Polymorphism
+    animals: list = [
+        Dog("Rex", 3, "Labrador"),
+        Cat("Whiskers", 5),
+        Dog("Buddy", 2, "Poodle"),
+    ]
+
+    for animal in animals:
+        print(f"{animal} says: {animal.speak()}")
+
+    print("\n=== BST with Pointers ===")
+    bst = BST()
+    values: list = [5, 3, 7, 1, 4, 6, 8, 2]
+    for v in values:
+        bst.insert(v)
+
+    print(f"Inserted: {values}")
+    print(f"Sorted  : {bst.sorted_values()}")
+
+    # Comprehensions & generators
+    print("\n=== Python Features ===")
+    evens: list = [x for x in range(20) if x % 2 == 0]
+    print(f"Even numbers: {evens}")
+
+    word_lengths: dict = {w: len(w) for w in ["PyPLone", "compiler", "pointers"]}
+    print(f"Word lengths: {word_lengths}")
+
+    # Exception handling
+    try:
+        result: float = 10 / 0
+    except ZeroDivisionError as e:
+        print(f"\nCaught exception: {e}")
+    finally:
+        print("Finally block executed.")
+
+
+main()

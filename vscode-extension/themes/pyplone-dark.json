@@ -1,0 +1,111 @@
+{
+  "name": "PyPLone Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#1e1e2e",
+    "editor.foreground": "#cdd6f4",
+    "editorCursor.foreground": "#cba6f7",
+    "editor.lineHighlightBackground": "#313244",
+    "editorLineNumber.foreground": "#585b70",
+    "editorLineNumber.activeForeground": "#cba6f7",
+    "editor.selectionBackground": "#45475a",
+    "editor.inactiveSelectionBackground": "#313244"
+  },
+  "tokenColors": [
+    {
+      "name": "Comments",
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": { "foreground": "#6c7086", "fontStyle": "italic" }
+    },
+    {
+      "name": "Strings",
+      "scope": ["string", "string.quoted"],
+      "settings": { "foreground": "#a6e3a1" }
+    },
+    {
+      "name": "F-String Interpolation",
+      "scope": ["string.interpolated", "meta.embedded.expression"],
+      "settings": { "foreground": "#a6e3a1" }
+    },
+    {
+      "name": "Numbers",
+      "scope": ["constant.numeric"],
+      "settings": { "foreground": "#fab387" }
+    },
+    {
+      "name": "Keywords",
+      "scope": ["keyword.control", "keyword.other"],
+      "settings": { "foreground": "#cba6f7", "fontStyle": "bold" }
+    },
+    {
+      "name": "Get / Import Keywords",
+      "scope": ["keyword.control.import"],
+      "settings": { "foreground": "#89dceb", "fontStyle": "bold" }
+    },
+    {
+      "name": "Pointer Keywords — new/delete/ptr/nullptr",
+      "scope": ["keyword.control.pointer", "storage.type.pointer"],
+      "settings": { "foreground": "#f38ba8", "fontStyle": "bold" }
+    },
+    {
+      "name": "Pointer Operators — -> &",
+      "scope": ["keyword.operator.pointer"],
+      "settings": { "foreground": "#f38ba8" }
+    },
+    {
+      "name": "Constants — True/False/None",
+      "scope": ["constant.language"],
+      "settings": { "foreground": "#fab387" }
+    },
+    {
+      "name": "Type Annotations — int/float/str/bool",
+      "scope": ["storage.type"],
+      "settings": { "foreground": "#89b4fa" }
+    },
+    {
+      "name": "Function Names",
+      "scope": ["entity.name.function"],
+      "settings": { "foreground": "#89b4fa" }
+    },
+    {
+      "name": "Class Names",
+      "scope": ["entity.name.type.class"],
+      "settings": { "foreground": "#f9e2af" }
+    },
+    {
+      "name": "def / class Keywords",
+      "scope": ["keyword.declaration.function", "keyword.declaration.class"],
+      "settings": { "foreground": "#cba6f7", "fontStyle": "bold" }
+    },
+    {
+      "name": "Decorators",
+      "scope": ["entity.name.function.decorator"],
+      "settings": { "foreground": "#eba0ac", "fontStyle": "italic" }
+    },
+    {
+      "name": "Builtins",
+      "scope": ["support.function.builtin"],
+      "settings": { "foreground": "#89dceb" }
+    },
+    {
+      "name": "Print",
+      "scope": ["keyword.other.print"],
+      "settings": { "foreground": "#89dceb", "fontStyle": "italic" }
+    },
+    {
+      "name": "Operators",
+      "scope": ["keyword.operator"],
+      "settings": { "foreground": "#89dceb" }
+    },
+    {
+      "name": "String Escapes",
+      "scope": ["constant.character.escape"],
+      "settings": { "foreground": "#cba6f7" }
+    },
+    {
+      "name": "Variables",
+      "scope": ["variable.other"],
+      "settings": { "foreground": "#cdd6f4" }
+    }
+  ]
+}
