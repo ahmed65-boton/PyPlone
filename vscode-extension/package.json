@@ -1,37 +1,26 @@
 {
-  "name": "pyplone",
-  "displayName": "PyPLone",
-  "description": "Syntax highlighting, snippets, and language support for PyPLone (.pylo) — Python-like syntax with C++ pointer support",
-  "version": "2.0.0",
+  "name": "pyplone-language",
+  "displayName": "PyPlone Language Support",
+  "description": "Syntax highlighting and language server for PyPlone (.pylo)",
+  "version": "0.0.1",
   "publisher": "pyplone",
   "engines": {
-    "vscode": "^1.75.0"
+    "vscode": "^1.80.0"
   },
   "categories": [
-    "Programming Languages",
-    "Snippets",
-    "Themes"
+    "Programming Languages"
   ],
-  "keywords": [
-    "pyplone",
-    "pylo",
-    "python",
-    "pointers",
-    "language"
+  "activationEvents": [
+    "onLanguage:pyplone"
   ],
-  "icon": "icon.png",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/pyplone/vscode-pyplone"
-  },
+  "main": "./extension.js",
   "contributes": {
     "languages": [
       {
         "id": "pyplone",
         "aliases": [
-          "PyPLone",
-          "pyplone",
-          "pylo"
+          "PyPlone",
+          "pyplone"
         ],
         "extensions": [
           ".pylo"
@@ -51,109 +40,9 @@
         "language": "pyplone",
         "path": "./snippets/pyplone.json"
       }
-    ],
-    "themes": [
-      {
-        "label": "PyPLone Dark",
-        "uiTheme": "vs-dark",
-        "path": "./themes/pyplone-dark.json"
-      }
-    ],
-    "commands": [
-      {
-        "command": "pyplone.runFile",
-        "title": "PyPLone: Run File",
-        "icon": "$(play)"
-      },
-      {
-        "command": "pyplone.compileFile",
-        "title": "PyPLone: Compile to Executable"
-      },
-      {
-        "command": "pyplone.emitPython",
-        "title": "PyPLone: Emit Transpiled Python"
-      }
-    ],
-    "menus": {
-      "editor/title": [
-        {
-          "when": "resourceExtname == .pylo",
-          "command": "pyplone.runFile",
-          "group": "navigation"
-        }
-      ],
-      "editor/context": [
-        {
-          "when": "resourceExtname == .pylo",
-          "command": "pyplone.runFile",
-          "group": "pyplone@1"
-        },
-        {
-          "when": "resourceExtname == .pylo",
-          "command": "pyplone.compileFile",
-          "group": "pyplone@2"
-        },
-        {
-          "when": "resourceExtname == .pylo",
-          "command": "pyplone.emitPython",
-          "group": "pyplone@3"
-        }
-      ]
-    },
-    "keybindings": [
-      {
-        "command": "pyplone.runFile",
-        "key": "f5",
-        "when": "resourceExtname == .pylo"
-      }
-    ],
-    "configuration": {
-      "title": "PyPLone",
-      "properties": {
-        "pyplone.compilerPath": {
-          "type": "string",
-          "default": "python PyPlone-compiler.py",
-          "description": "Path or command to invoke the PyPLone compiler"
-        },
-        "pyplone.showTranspiledOutput": {
-          "type": "boolean",
-          "default": false,
-          "description": "Show the transpiled Python output after compilation"
-        }
-      }
-    }
+    ]
   },
-  "activationEvents": [
-    "onLanguage:pyplone",
-    "onCommand:pyplone.runFile",
-    "onCommand:pyplone.compileFile",
-    "onCommand:pyplone.emitPython"
-  ],
-  "main": "./extension.js",
-  "scripts": {
-    "vscode:prepublish": "echo 'ready'",
-    "package": "vsce package"
-  },
-  "devDependencies": {
-    "@types/vscode": "^1.75.0",
-    "@vscode/vsce": "^2.0.0"
-  },
-
-  
-  "contributes": {
-  "languages": [
-    {
-      "id": "pyplone",
-      "extensions": [".pylo"],
-      "aliases": ["PyPlone", "pyplone"]
-    }
-  ],
-  "iconThemes": [
-    {
-      "id": "pyplone-icons",
-      "label": "PyPlone Icons",
-      "path": "./pyplone-icon-theme.json"
-    }
-  ]
-}
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  }
 }

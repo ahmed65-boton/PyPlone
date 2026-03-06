@@ -1,10 +1,11 @@
 {
   "iconDefinitions": {
-    "pyplone-file": {
+    "pylo": {
       "iconPath": "./icon.png"
     }
   },
   "fileExtensions": {
-    "pylo": "pyplone-file"
-  }
+    "pylo": "pylo"
+  },
+  "fileNames": {}
 }

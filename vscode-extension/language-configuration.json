@@ -1,7 +1,7 @@
 {
   "comments": {
     "lineComment": "#",
-    "blockComment": ["\"\"\"", "\"\"\""]
+    "blockComment": ["###", "###"]
   },
   "brackets": [
     ["{", "}"],
@@ -12,9 +12,8 @@
     { "open": "{", "close": "}" },
     { "open": "[", "close": "]" },
     { "open": "(", "close": ")" },
-    { "open": "\"", "close": "\"", "notIn": ["string"] },
-    { "open": "'", "close": "'", "notIn": ["string"] },
-    { "open": "\"\"\"", "close": "\"\"\"", "notIn": ["string"] }
+    { "open": "\"", "close": "\"", "notIn": ["string", "comment"] },
+    { "open": "'", "close": "'", "notIn": ["string", "comment"] }
   ],
   "surroundingPairs": [
     ["{", "}"],
@@ -23,9 +22,14 @@
     ["\"", "\""],
     ["'", "'"]
   ],
-  "indentationRules": {
-    "increaseIndentPattern": "^((?!#).)*(\\bdef\\b.*:|\\bclass\\b.*:|\\bif\\b.*:|\\belif\\b.*:|\\belse\\b.*:|\\bfor\\b.*:|\\bwhile\\b.*:|\\btry\\b.*:|\\bexcept\\b.*:|\\bfinally\\b.*:|\\bwith\\b.*:)\\s*$",
-    "decreaseIndentPattern": "^\\s*(elif|else|except|finally)\\b"
+  "folding": {
+    "markers": {
+      "start": "^\\s*(grove|seed|branch|otherwise|bloom gui|on tap)\\b.*$",
+      "end": "^\\s*$"
+    }
   },
-  "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\#\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\\\"\\,\\<\\>\\/\\?\\s]+)"
+  "indentationRules": {
+    "increaseIndentPattern": "^.*\\b(grove|seed|branch|otherwise if|otherwise|bloom gui|leaf|field|on tap)\\b.*:\\s*$",
+    "decreaseIndentPattern": "^\\s*(otherwise if|otherwise)\\b.*:\\s*$"
+  }
 }

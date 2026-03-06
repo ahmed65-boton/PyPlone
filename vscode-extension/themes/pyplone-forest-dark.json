@@ -1,0 +1,33 @@
+{
+  "name": "PyPlone Forest Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#0d1117",
+    "editor.foreground": "#d7e3d4",
+    "editorLineNumber.foreground": "#49604a",
+    "editorLineNumber.activeForeground": "#a8c3a3",
+    "editorCursor.foreground": "#cbe8b1",
+    "editor.selectionBackground": "#264130",
+    "editor.inactiveSelectionBackground": "#1a2c22",
+    "editorIndentGuide.background1": "#203126",
+    "editorIndentGuide.activeBackground1": "#446c50",
+    "activityBar.background": "#111a15",
+    "sideBar.background": "#101814",
+    "titleBar.activeBackground": "#111a15",
+    "statusBar.background": "#18231d",
+    "button.background": "#2d6a4f",
+    "button.foreground": "#f4fff6"
+  },
+  "tokenColors": [
+    { "scope": ["comment", "punctuation.definition.comment"], "settings": { "foreground": "#6f8b74", "fontStyle": "italic" } },
+    { "scope": ["string"], "settings": { "foreground": "#b8e986" } },
+    { "scope": ["constant.numeric"], "settings": { "foreground": "#f7b267" } },
+    { "scope": ["keyword.control.import.pyplone", "keyword.control.gui.pyplone"], "settings": { "foreground": "#7bd389", "fontStyle": "bold" } },
+    { "scope": ["keyword.control.flow.pyplone", "storage.modifier.assignment.pyplone"], "settings": { "foreground": "#9ad1d4", "fontStyle": "bold" } },
+    { "scope": ["storage.type.function.pyplone", "storage.type.class.pyplone"], "settings": { "foreground": "#c3a6ff", "fontStyle": "bold" } },
+    { "scope": ["entity.name.function.pyplone", "entity.name.type.class.pyplone"], "settings": { "foreground": "#f6d365" } },
+    { "scope": ["support.function.builtin.pyplone"], "settings": { "foreground": "#8ecae6" } },
+    { "scope": ["constant.language.pyplone"], "settings": { "foreground": "#ff9f9f", "fontStyle": "bold" } },
+    { "scope": ["keyword.operator"], "settings": { "foreground": "#ffd166" } }
+  ]
+}
