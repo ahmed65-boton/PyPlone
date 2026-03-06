@@ -1,3 +1,4 @@
+!python/Lib/site-packages/
 # Node modules (VERY IMPORTANT)
 vscode-extension/node_modules/
 
@@ -35,3 +36,7 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+python/
+
+
